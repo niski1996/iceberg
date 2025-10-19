@@ -8,7 +8,10 @@ helm repo update
 helm pull minio/minio --untar
 helm install --namespace iceberg --set rootUser=rootuser,rootPassword=rootpass123 --generate-name minio/minio
 
-#!/bin/bash
+echo "instaling minio client"
+curl -O https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+sudo mv mc /usr/local/bin/
 
 cat <<EOF > ./minio/values.yaml
 ## Helm values for MinIO
@@ -290,3 +293,5 @@ helm template minio ./ \
 
 kubectl get namespaces
 kubectl apply -f minio/minio-deploy.yaml
+
+kubectl port-forward pod/minio-1760886437-0 9000:9000 -n iceberg
